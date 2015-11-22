@@ -1,0 +1,3 @@
+module net.frozentux.qmlcomponents
+plugin qml-taskwarrior-executioner
+
