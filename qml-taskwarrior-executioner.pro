@@ -15,7 +15,8 @@ HEADERS += \
     qml-taskwarrior-executioner_plugin.h \
     taskwarrior.h
 
-DISTFILES = qmldir
+DISTFILES = qmldir \
+    test.qml
 
 !equals(_PRO_FILE_PWD_, $$OUT_PWD) {
     copy_qmldir.target = $$OUT_PWD/qmldir
