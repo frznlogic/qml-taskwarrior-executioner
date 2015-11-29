@@ -2,6 +2,9 @@
 #define TASKWARRIOR_H
 
 #include <QQuickItem>
+#include <QProcess>
+#include <QFile>
+
 
 class TaskWarrior : public QQuickItem
 {
@@ -20,9 +23,14 @@ public:
 
 signals:
     void jsonFileChanged();
+public slots:
+    void syncFinished(int exitCode, QProcess::ExitStatus es);
 
 private:
     QString m_jsonFile;
+    QProcess m_process;
+    QFile m_file;
+
 };
 
 #endif // TASKWARRIOR_H

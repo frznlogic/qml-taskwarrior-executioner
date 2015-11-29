@@ -1,16 +1,15 @@
 #include "taskwarrior.h"
 
-#include <QProcess>
+#include <QDebug>
 
 TaskWarrior::TaskWarrior(QQuickItem *parent):
     QQuickItem(parent),
-    m_jsonFile("")
+    m_jsonFile(""),
+    m_file(m_jsonFile)
 {
-    // By default, QQuickItem does not draw anything. If you subclass
-    // QQuickItem to create a visual item, you will need to uncomment the
-    // following line and re-implement updatePaintNode()
 
-    // setFlag(ItemHasContents, true);
+    connect(&m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(syncFinished(int, QProcess::ExitStatus)));
+
 }
 
 TaskWarrior::~TaskWarrior()
@@ -19,9 +18,8 @@ TaskWarrior::~TaskWarrior()
 
 void TaskWarrior::sync()
 {
-    QProcess process;
-    process.start("task");
-
+    QStringList args("export");
+    m_process.start("task", args);
 }
 
 QString TaskWarrior::jsonFile()
@@ -33,5 +31,31 @@ QString TaskWarrior::jsonFile()
 void TaskWarrior::setJsonFile(QString str)
 {
     m_jsonFile = str;
+    m_file.close();
+    m_file.setFileName(m_jsonFile);
+    m_file.open(QIODevice::WriteOnly);
+}
+
+void TaskWarrior::syncFinished(int exitCode, QProcess::ExitStatus es)
+{
+    m_file.close();
+    m_file.remove();
+    m_file.open(QIODevice::WriteOnly);
+
+
+    m_file.write(QByteArray("["));
+
+    bool firstLine = true;
+
+    while (m_process.canReadLine() == true)
+    {
+        QByteArray ba = m_process.readLine();
+
+        (firstLine == true) ? firstLine = false : m_file.write(",");
+
+        m_file.write(ba);
+    }
+
+    m_file.write(QByteArray("]"));
 }
 
