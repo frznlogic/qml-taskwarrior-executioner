@@ -46,10 +46,8 @@ void TaskWarrior::setJsonFile(QString str)
 
 void TaskWarrior::syncFinished(int exitCode, QProcess::ExitStatus es)
 {
-    m_file.close();
-    m_file.remove();
-    m_file.open(QIODevice::WriteOnly);
 
+    m_file.seek(0);
 
     m_file.write(QByteArray("["));
 
@@ -65,5 +63,9 @@ void TaskWarrior::syncFinished(int exitCode, QProcess::ExitStatus es)
     }
 
     m_file.write(QByteArray("]"));
+
+    m_file.resize(m_file.pos());
+
+    emit(jsonFileChanged());
 }
 
