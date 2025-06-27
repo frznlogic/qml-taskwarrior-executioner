@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.25)
 
 project(QmlTaskwarriorExecutioner)
 
@@ -12,6 +12,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++17")
 
 set(INSTALLATION_LOCATION ${CMAKE_INSTALL_DATADIR}/QmlMirror)
 
+cmake_policy(SET CMP0071 NEW)
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
@@ -23,7 +25,7 @@ macro(add_qml_plugin PLUGIN_ID SOURCE_FILES)
 
     set(PLUGIN_INSTALLATION_PATH ${QT_QML_MODULES_LOCATION}/${PLUGIN_PATH})
     add_library(${PLUGIN_ID} SHARED ${SOURCE_FILES})
-    target_link_libraries(${PLUGIN_ID} PRIVATE Qt6::Core Qt6::Qml Qt6::Network Qt6::Quick Qt6::Positioning)
+    target_link_libraries(${PLUGIN_ID} PUBLIC Qt6::Core Qt6::Qml Qt6::Network Qt6::Quick Qt6::Positioning)
 
     install(TARGETS ${PLUGIN_ID} DESTINATION ${PLUGIN_INSTALLATION_PATH})
 
@@ -44,9 +46,10 @@ macro(add_qml_plugin PLUGIN_ID SOURCE_FILES)
     )
     qt_policy(SET QTP0001 NEW)
     qt_add_qml_module(${PLUGIN_ID}
-                        URI qml-taskwarrior-executioner
+                        URI qmltaskwarriorexecutioner
                         VERSION 0.1.0 
                         SOURCES ${SOURCE_FILES}
+                        OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/qml/qmltaskwarriorexecutioner"
     )
 
 endmacro()
