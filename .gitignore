@@ -2,3 +2,4 @@ qml-taskwarrior-executioner.pro.user
 jsondata.txt
 build/
 *.sw[a-z]
+.qmlls.ini
