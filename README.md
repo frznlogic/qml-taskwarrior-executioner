@@ -7,21 +7,24 @@ developped for the needs of the QmlMirror project.
 
 This extension requires:
 * taskwarrior 2.4.0 or higher
-* Qt 5
+* Qt 6
 
 ## Installation
 
-To install this package:
+To install this package with CMake and a private Qt installation:
 
 * download qml-taskwarrior-executioner
 * cd qml-taskwarrior-executioner
-* mkdir build && cd build
-* qmake ..
-* make -j4 
-* make install
+* cmake -B build -S . -DCMAKE_PREFIX_PATH=<QT_PREFIX>/lib/cmake -DCMAKE_INSTALL_PREFIX=<QT_PREFIX>
+* cmake --build build/
+* cmake --install build/
+
+The QML plugin and qmldir file are installed into Qt's QML import tree automatically.
+
+If you already configured the build tree, you can also override the install location at install time:
+
+* cmake --install build/ --prefix <QT_PREFIX>
 
 ## Usage
 
 See the test.qml for a simple usage. 
-
-
